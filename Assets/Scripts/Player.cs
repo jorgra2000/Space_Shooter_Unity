@@ -10,10 +10,12 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
 
     private float timer;
+    private AudioSource audioSource;
 
     void Start()
     {
         timer = 0.5f;
+        audioSource = GetComponent<AudioSource>();
     }
 
 
@@ -45,6 +47,7 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && timer > shootRatio) 
         {
             Instantiate(bulletPrefab, spawnPoint.position, Quaternion.identity);
+            audioSource.Play();
             timer = 0;
         }
     }

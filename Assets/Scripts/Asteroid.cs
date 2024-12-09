@@ -9,7 +9,21 @@ public class Asteroid : MonoBehaviour
 
     void Update()
     {
+        Movement();
+    }
+
+    protected void Movement() 
+    {
         transform.Translate(Vector3.left * movementSpeed * Time.deltaTime, Space.World);
         transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("BulletPlayer")) 
+        {
+            Destroy(collision.gameObject);
+            Destroy(this.gameObject);
+        }
     }
 }
