@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AsteroidBig : Asteroid
 {
     [SerializeField] private GameObject asteroidPrefab;
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
@@ -20,12 +16,20 @@ public class AsteroidBig : Asteroid
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("BulletPlayer"))
+        if (collision.CompareTag("BulletPlayer") || collision.CompareTag("Player"))
         {
-            Destroy(collision.gameObject);
-            Instantiate(asteroidPrefab ,this.transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity);
-            Instantiate(asteroidPrefab, this.transform.position - new Vector3(0f, 0.5f, 0f), Quaternion.identity);
-            Destroy(this.gameObject);
+
+            DestroyAsteroid();
+            if (collision.CompareTag("BulletPlayer"))
+            {
+                Instantiate(asteroidPrefab, this.transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity);
+                Instantiate(asteroidPrefab, this.transform.position - new Vector3(0f, 0.5f, 0f), Quaternion.identity);
+            }
+
+            PlayParticles();
+            GetComponent<CircleCollider2D>().enabled = false;
+            GetComponent<SpriteRenderer>().enabled = false;
+            DestroyAsteroid();
         }
     }
 }

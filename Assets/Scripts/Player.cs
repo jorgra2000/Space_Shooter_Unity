@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,12 +9,16 @@ public class Player : MonoBehaviour
     [SerializeField] private float shootRatio;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform spawnPoint;
+    [SerializeField] private TextMeshProUGUI lifesText;
 
     private float timer;
     private AudioSource audioSource;
+    private int lifes;
+
 
     void Start()
     {
+        lifes = 3;
         timer = 0.5f;
         audioSource = GetComponent<AudioSource>();
     }
@@ -49,6 +54,20 @@ public class Player : MonoBehaviour
             Instantiate(bulletPrefab, spawnPoint.position, Quaternion.identity);
             audioSource.Play();
             timer = 0;
+        }
+    }
+
+    void UpdateLifes() 
+    {
+        lifesText.text = lifes.ToString();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            lifes--;
+            UpdateLifes();
         }
     }
 }

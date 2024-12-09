@@ -6,6 +6,7 @@ public class Asteroid : MonoBehaviour
 {
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSpeed;
+    [SerializeField] private ParticleSystem particles;
 
     void Update()
     {
@@ -18,12 +19,28 @@ public class Asteroid : MonoBehaviour
         transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
     }
 
+    protected IEnumerator DestroyAsteroid() 
+    {
+        yield return new WaitForSeconds(1.5f);
+        Destroy(this.gameObject);
+    }
+
+    protected void PlayParticles() 
+    {
+        particles.Play();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("BulletPlayer")) 
+        if (collision.CompareTag("BulletPlayer") || collision.CompareTag("Player")) 
         {
-            Destroy(collision.gameObject);
-            Destroy(this.gameObject);
+            if(collision.CompareTag("BulletPlayer"))
+                Destroy(collision.gameObject);
+
+            PlayParticles();
+            GetComponent<CircleCollider2D>().enabled = false;
+            GetComponent<SpriteRenderer>().enabled = false;
+            DestroyAsteroid();
         }
     }
 }
