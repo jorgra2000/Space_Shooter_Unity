@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private Crossfade crossfade;
     public void StartGame() 
     {
-        SceneManager.LoadScene(1);
+        crossfade.LoadScene(1);
     }
 }

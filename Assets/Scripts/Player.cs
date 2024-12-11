@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -10,14 +9,16 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private TextMeshProUGUI lifesText;
+    [SerializeField] private GameObject shield;
 
     private float timer;
     private AudioSource audioSource;
     private int lifes;
-
+    private bool shieldActive;
 
     void Start()
     {
+        shieldActive = false;
         lifes = 3;
         timer = 0.5f;
         audioSource = GetComponent<AudioSource>();
@@ -57,17 +58,67 @@ public class Player : MonoBehaviour
         }
     }
 
+    void PowerUpFireSpeed() 
+    {
+        shootRatio = 0.3f;
+    }
+
+    void PowerUpSpeed() 
+    {
+        speed = 8f;
+    }
+
     void UpdateLifes() 
     {
         lifesText.text = lifes.ToString();
     }
 
+    IEnumerator TimerPowerUp(float time) 
+    {
+        yield return new WaitForSeconds(time);
+        shootRatio = 0.5f;
+        speed = 5f;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy") || collision.CompareTag("BulletEnemy"))
         {
-            lifes--;
-            UpdateLifes();
+            if (collision.CompareTag("BulletEnemy")) 
+            {
+                Destroy(collision.gameObject);
+            }
+
+            if (!shieldActive) 
+            {
+                lifes--;
+                UpdateLifes();
+            }
+            else 
+            {
+                shieldActive = false;
+            }
+        }
+
+        if (collision.CompareTag("PU_FireSpeed")) 
+        {
+            PowerUpFireSpeed();
+            Destroy(collision.gameObject);
+            StartCoroutine(TimerPowerUp(5f));
+        }
+
+        if (collision.CompareTag("PU_Shield"))
+        {
+            shield.SetActive(true);
+            shieldActive = true;
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.CompareTag("PU_Speed")) 
+        {
+            PowerUpSpeed();
+            Destroy(collision.gameObject);
+            StartCoroutine(TimerPowerUp(5f));
         }
     }
 }

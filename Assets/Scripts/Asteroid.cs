@@ -21,6 +21,9 @@ public class Asteroid : MonoBehaviour
 
     protected IEnumerator DestroyAsteroid() 
     {
+        PlayParticles();
+        GetComponent<CircleCollider2D>().enabled = false;
+        GetComponent<SpriteRenderer>().enabled = false;
         yield return new WaitForSeconds(1.5f);
         Destroy(this.gameObject);
     }
@@ -32,15 +35,15 @@ public class Asteroid : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("BulletPlayer") || collision.CompareTag("Player")) 
+        if (collision.CompareTag("BulletPlayer") || collision.CompareTag("Player") || collision.CompareTag("Shield"))
         {
             if(collision.CompareTag("BulletPlayer"))
                 Destroy(collision.gameObject);
 
-            PlayParticles();
-            GetComponent<CircleCollider2D>().enabled = false;
-            GetComponent<SpriteRenderer>().enabled = false;
-            DestroyAsteroid();
+            if(collision.CompareTag("Shield"))
+                collision.gameObject.SetActive(false);
+
+            StartCoroutine(DestroyAsteroid());
         }
     }
 }

@@ -4,11 +4,6 @@ public class AsteroidBig : Asteroid
 {
     [SerializeField] private GameObject asteroidPrefab;
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         Movement();
@@ -16,20 +11,18 @@ public class AsteroidBig : Asteroid
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("BulletPlayer") || collision.CompareTag("Player"))
+        if (collision.CompareTag("BulletPlayer") || collision.CompareTag("Player") || collision.CompareTag("Shield"))
         {
-
-            DestroyAsteroid();
             if (collision.CompareTag("BulletPlayer"))
             {
                 Instantiate(asteroidPrefab, this.transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                 Instantiate(asteroidPrefab, this.transform.position - new Vector3(0f, 0.5f, 0f), Quaternion.identity);
             }
 
-            PlayParticles();
-            GetComponent<CircleCollider2D>().enabled = false;
-            GetComponent<SpriteRenderer>().enabled = false;
-            DestroyAsteroid();
+            if (collision.CompareTag("Shield"))
+                collision.gameObject.SetActive(false);
+
+            StartCoroutine(DestroyAsteroid());
         }
     }
 }

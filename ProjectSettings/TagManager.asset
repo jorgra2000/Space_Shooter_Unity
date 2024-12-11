@@ -6,6 +6,11 @@ TagManager:
   tags:
   - BulletPlayer
   - Enemy
+  - PU_FireSpeed
+  - PU_Shield
+  - PU_Speed
+  - Shield
+  - BulletEnemy
   layers:
   - Default
   - TransparentFX

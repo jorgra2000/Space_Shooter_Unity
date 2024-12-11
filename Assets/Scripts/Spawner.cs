@@ -6,9 +6,11 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] private GameObject enemy;
 
+
     void Start()
     {
         StartCoroutine(SpawnEnemies());
+
     }
 
     
@@ -19,6 +21,7 @@ public class Spawner : MonoBehaviour
 
     IEnumerator SpawnEnemies() 
     {
+
         while (true)
         {
             Vector3 randomPosition = new Vector3(transform.position.x, Random.Range(-4.4f, 4.4f), 0f);
