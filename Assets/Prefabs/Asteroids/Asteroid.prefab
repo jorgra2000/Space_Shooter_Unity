@@ -4995,3 +4995,4 @@ MonoBehaviour:
   movementSpeed: 4
   rotationSpeed: 45
   particles: {fileID: 299390855852514480}
+  goldPrefab: {fileID: 3238834450999335902, guid: 877802d6ca889d34ca5761555d3e7e7e, type: 3}

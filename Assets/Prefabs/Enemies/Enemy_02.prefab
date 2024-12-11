@@ -201,7 +201,8 @@ MonoBehaviour:
   bulletEnemyPrefab: {fileID: 5303824174560747511, guid: 419066bca11bfe1438919e6c293e9efc, type: 3}
   particles: {fileID: 3193120033379065387}
   skin: {fileID: 2782628733264836994}
-  spawnPoint: {fileID: 3009213886028672112}
+  spawnPoint:
+  - {fileID: 3009213886028672112}
   amplitude: 2
   verticalSpeed: 1.5
 --- !u!1 &3009213886028672112

@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 963a0b2e774a5284ba7d4d5477c5b2d9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3159de27c8bfaba46a39678840ea2f63, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -95,9 +95,9 @@ GameObject:
   - component: {fileID: 6140534707745010740}
   - component: {fileID: 172592869595478868}
   - component: {fileID: 189256959356259527}
-  - component: {fileID: 6578754652703761879}
+  - component: {fileID: 2247211755145959469}
   m_Layer: 0
-  m_Name: Enemy_01
+  m_Name: Enemy_05
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -183,7 +183,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &6578754652703761879
+--- !u!114 &2247211755145959469
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -192,17 +192,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 909041249734107919}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4273223d0ac549f44b9b5ab88089cd45, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b8e3b66cdb4eae4298ffd1af1aa4b71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lifes: 2
-  speed: 5
+  speed: 1
   shootRatio: 1
   bulletEnemyPrefab: {fileID: 5303824174560747511, guid: 419066bca11bfe1438919e6c293e9efc, type: 3}
   particles: {fileID: 3193120033379065387}
   skin: {fileID: 2782628733264836994}
   spawnPoint:
   - {fileID: 3009213886028672112}
+  circleSpeed: 2
+  circleRadius: 2
 --- !u!1 &3009213886028672112
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,17 +9,22 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private TextMeshProUGUI lifesText;
+    [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private GameObject shield;
+    [SerializeField] private GameObject deathParticles;
+    [SerializeField] private GameObject gameOverMenu;
 
     private float timer;
     private AudioSource audioSource;
     private int lifes;
+    private int gold;
     private bool shieldActive;
 
     void Start()
     {
         shieldActive = false;
-        lifes = 3;
+        lifes = PlayerPrefs.GetInt("Lifes");
+        gold = PlayerPrefs.GetInt("Gold");
         timer = 0.5f;
         audioSource = GetComponent<AudioSource>();
     }
@@ -73,6 +78,11 @@ public class Player : MonoBehaviour
         lifesText.text = lifes.ToString();
     }
 
+    void UpdateGold() 
+    {
+        goldText.text = gold.ToString();
+    }
+
     IEnumerator TimerPowerUp(float time) 
     {
         yield return new WaitForSeconds(time);
@@ -93,11 +103,24 @@ public class Player : MonoBehaviour
             {
                 lifes--;
                 UpdateLifes();
+                if (lifes <= 0) 
+                {
+                    Instantiate(deathParticles, transform.position, Quaternion.identity);
+                    gameOverMenu.SetActive(true);
+                    Destroy(this.gameObject);
+                }
             }
             else 
             {
                 shieldActive = false;
             }
+        }
+
+        if (collision.CompareTag("Gold")) 
+        {
+            Destroy(collision.gameObject);
+            gold++;
+            UpdateGold();
         }
 
         if (collision.CompareTag("PU_FireSpeed")) 
