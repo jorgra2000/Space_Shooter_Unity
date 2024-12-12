@@ -8,6 +8,7 @@ public class Asteroid : MonoBehaviour
     [SerializeField] private float rotationSpeed;
     [SerializeField] private ParticleSystem particles;
     [SerializeField] private GameObject goldPrefab;
+    [SerializeField] private bool isBig;
 
     void Update()
     {
@@ -23,7 +24,10 @@ public class Asteroid : MonoBehaviour
     protected IEnumerator DestroyAsteroid() 
     {
         PlayParticles();
-        Instantiate(goldPrefab, transform.position, Quaternion.identity);
+        if (!isBig) 
+        {
+            Instantiate(goldPrefab, transform.position, Quaternion.identity);
+        }
         GetComponent<CircleCollider2D>().enabled = false;
         GetComponent<SpriteRenderer>().enabled = false;
         yield return new WaitForSeconds(1.5f);
@@ -39,8 +43,8 @@ public class Asteroid : MonoBehaviour
     {
         if (collision.CompareTag("BulletPlayer") || collision.CompareTag("Player") || collision.CompareTag("Shield"))
         {
-            if(collision.CompareTag("BulletPlayer"))
-                Destroy(collision.gameObject);
+            if (collision.CompareTag("BulletPlayer"))
+                collision.GetComponent<Bullet_Player>().Pool.Release(collision.GetComponent<Bullet_Player>());
 
             if(collision.CompareTag("Shield"))
                 collision.gameObject.SetActive(false);

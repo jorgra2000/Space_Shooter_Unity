@@ -17,6 +17,7 @@ public class AsteroidBig : Asteroid
             {
                 Instantiate(asteroidPrefab, this.transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                 Instantiate(asteroidPrefab, this.transform.position - new Vector3(0f, 0.5f, 0f), Quaternion.identity);
+                collision.GetComponent<Bullet_Player>().Pool.Release(collision.GetComponent<Bullet_Player>());
             }
 
             if (collision.CompareTag("Shield"))

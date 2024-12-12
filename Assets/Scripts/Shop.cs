@@ -61,9 +61,13 @@ public class Shop : MonoBehaviour
     {
         lifesText.text = PlayerPrefs.GetInt("Lifes").ToString();
         goldText.text = PlayerPrefs.GetInt("Gold").ToString();
-        if(PlayerPrefs.GetInt("Lifes") >= 5) 
+        if (PlayerPrefs.GetInt("Lifes") >= 5)
         {
             lifesButton.interactable = false;
+        }
+        else 
+        {
+            lifesButton.interactable = true;
         }
 
         if (PlayerPrefs.GetInt("x2") == 1)

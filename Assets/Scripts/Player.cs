@@ -1,13 +1,14 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float shootRatio;
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform spawnPoint;
+    [SerializeField] private Bullet_Player bulletPrefab;
+    [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private TextMeshProUGUI lifesText;
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private GameObject shield;
@@ -20,13 +21,58 @@ public class Player : MonoBehaviour
     private int gold;
     private bool shieldActive;
 
+    private ObjectPool<Bullet_Player> bulletPool;
+
+    private System.Action shootToExecute;
+
+    void Awake()
+    {
+        bulletPool = new ObjectPool<Bullet_Player> (CreateBullet, null, ReleaseBullet, DestroyBullet);
+    }
+
     void Start()
     {
+        if(PlayerPrefs.GetInt("x3") == 1) 
+        {
+            shootToExecute = TripleShoot;
+        }
+        else if(PlayerPrefs.GetInt("x2") == 1) 
+        {
+            shootToExecute = DoubleShoot;
+        }
+        else 
+        {
+            shootToExecute = SimpleShoot;
+        }
+
         shieldActive = false;
         lifes = PlayerPrefs.GetInt("Lifes");
         gold = PlayerPrefs.GetInt("Gold");
         timer = 0.5f;
         audioSource = GetComponent<AudioSource>();
+    }
+
+    private Bullet_Player CreateBullet()
+    {
+        Bullet_Player bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        bullet.Pool = bulletPool;
+        return bullet;
+    }
+
+    private void GetBullet(Bullet_Player bullet)
+    {
+        bullet.transform.position = spawnPoints[0].position;
+        bullet.gameObject.SetActive(true);
+    }
+
+    private void ReleaseBullet(Bullet_Player bullet)
+    {
+        bullet.gameObject.SetActive(false);
+    }
+
+    private void DestroyBullet(Bullet_Player bullet)
+    {
+        Destroy(bullet.gameObject);
     }
 
 
@@ -57,9 +103,36 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space) && timer > shootRatio) 
         {
-            Instantiate(bulletPrefab, spawnPoint.position, Quaternion.identity);
+            shootToExecute?.Invoke();
             audioSource.Play();
             timer = 0;
+        }
+    }
+
+    void SimpleShoot() 
+    {
+        Bullet_Player bullet = bulletPool.Get();
+        bullet.transform.position = spawnPoints[0].position;
+        bullet.gameObject.SetActive(true);
+    }
+
+    void DoubleShoot() 
+    {
+        for (int i = 1; i <=2; i++) 
+        {
+            Bullet_Player bullet = bulletPool.Get();
+            bullet.transform.position = spawnPoints[i].position;
+            bullet.gameObject.SetActive(true);
+        }
+
+    }
+    void TripleShoot()
+    {
+        for (int i = 0; i <= 2; i++)
+        {
+            Bullet_Player bullet = bulletPool.Get();
+            bullet.transform.position = spawnPoints[i].position;
+            bullet.gameObject.SetActive(true);
         }
     }
 

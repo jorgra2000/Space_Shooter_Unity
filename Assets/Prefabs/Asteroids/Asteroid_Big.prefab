@@ -165,6 +165,8 @@ MonoBehaviour:
   movementSpeed: 3
   rotationSpeed: 45
   particles: {fileID: 3721696541285483399}
+  goldPrefab: {fileID: 3238834450999335902, guid: 877802d6ca889d34ca5761555d3e7e7e, type: 3}
+  isBig: 1
   asteroidPrefab: {fileID: 5462253656190723472, guid: a171f01153019cf4b822428e8d237be9, type: 3}
 --- !u!1 &7950305066881259787
 GameObject:
