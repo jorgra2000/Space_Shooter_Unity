@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -9,21 +10,30 @@ public class Player : MonoBehaviour
     [SerializeField] private float shootRatio;
     [SerializeField] private Bullet_Player bulletPrefab;
     [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private SpriteRenderer skin;
     [SerializeField] private TextMeshProUGUI lifesText;
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private GameObject shield;
     [SerializeField] private GameObject deathParticles;
     [SerializeField] private GameObject gameOverMenu;
+    [SerializeField] private Image[] powerUpImages;
+    [SerializeField] private AudioClip damageSound, shootSound;
 
     private float timer;
     private AudioSource audioSource;
     private int lifes;
     private int gold;
     private bool shieldActive;
+    private float startSpeed;
+    private float startShootRatio;
+    private Color32 hitColor;
 
     private ObjectPool<Bullet_Player> bulletPool;
 
     private System.Action shootToExecute;
+
+    public int Lifes { get => lifes; set => lifes = value; }
+    public int Gold { get => gold; set => gold = value; }
 
     void Awake()
     {
@@ -48,7 +58,14 @@ public class Player : MonoBehaviour
         shieldActive = false;
         lifes = PlayerPrefs.GetInt("Lifes");
         gold = PlayerPrefs.GetInt("Gold");
+
+        startSpeed = speed;
+        startShootRatio = shootRatio;
+
+        UpdateGold();
+        UpdateLifes();
         timer = 0.5f;
+        hitColor = new Color32(255, 117, 117, 255);
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -138,12 +155,14 @@ public class Player : MonoBehaviour
 
     void PowerUpFireSpeed() 
     {
-        shootRatio = 0.3f;
+        shootRatio = 0.2f;
+        powerUpImages[1].gameObject.SetActive(true);
     }
 
     void PowerUpSpeed() 
     {
-        speed = 8f;
+        speed = 9f;
+        powerUpImages[0].gameObject.SetActive(true);
     }
 
     void UpdateLifes() 
@@ -156,11 +175,46 @@ public class Player : MonoBehaviour
         goldText.text = gold.ToString();
     }
 
-    IEnumerator TimerPowerUp(float time) 
+    void ResetPowerUp(string name) 
+    {
+        if (name.Equals("Speed")) 
+        {
+            speed = startSpeed;
+            powerUpImages[0].gameObject.SetActive(false);
+        }
+
+        if (name.Equals("ShootSpeed")) 
+        {
+            shootRatio = startShootRatio;
+            powerUpImages[1].gameObject.SetActive(false);
+        }
+
+        if (name.Equals("Shield")) 
+        {
+            shieldActive = false;
+            shield.SetActive(false);
+            powerUpImages[2].gameObject.SetActive(false);
+        }
+    }
+
+    IEnumerator TimerPowerUp(float time, string name) 
     {
         yield return new WaitForSeconds(time);
-        shootRatio = 0.5f;
-        speed = 5f;
+        ResetPowerUp(name);
+    }
+
+    public void TakeDamage()
+    {
+        audioSource.clip = damageSound;
+        audioSource.Play();
+        skin.color = hitColor;
+        Invoke(nameof(RestoreColor), 0.35f);
+    }
+
+    private void RestoreColor()
+    {
+       skin.color = Color.white;
+       audioSource.clip = shootSound;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -174,6 +228,7 @@ public class Player : MonoBehaviour
 
             if (!shieldActive) 
             {
+                TakeDamage();
                 lifes--;
                 UpdateLifes();
                 if (lifes <= 0) 
@@ -185,7 +240,7 @@ public class Player : MonoBehaviour
             }
             else 
             {
-                shieldActive = false;
+                ResetPowerUp("Shield");
             }
         }
 
@@ -200,12 +255,13 @@ public class Player : MonoBehaviour
         {
             PowerUpFireSpeed();
             Destroy(collision.gameObject);
-            StartCoroutine(TimerPowerUp(5f));
+            StartCoroutine(TimerPowerUp(20f, "ShootSpeed"));
         }
 
         if (collision.CompareTag("PU_Shield"))
         {
             shield.SetActive(true);
+            powerUpImages[2].gameObject.SetActive(true);
             shieldActive = true;
             Destroy(collision.gameObject);
         }
@@ -214,7 +270,7 @@ public class Player : MonoBehaviour
         {
             PowerUpSpeed();
             Destroy(collision.gameObject);
-            StartCoroutine(TimerPowerUp(5f));
+            StartCoroutine(TimerPowerUp(20f, "Speed"));
         }
     }
 }

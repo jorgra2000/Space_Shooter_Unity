@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Asteroid : MonoBehaviour
@@ -10,9 +9,19 @@ public class Asteroid : MonoBehaviour
     [SerializeField] private GameObject goldPrefab;
     [SerializeField] private bool isBig;
 
+    private float timer = 0f;
+
     void Update()
     {
         Movement();
+
+        timer += Time.deltaTime;
+
+        if (timer > 10f)
+        {
+            Destroy(gameObject);
+            timer = 0f;
+        }
     }
 
     protected void Movement() 

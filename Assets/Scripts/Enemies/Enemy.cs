@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private int lifes;
@@ -10,8 +11,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private ParticleSystem particles;
     [SerializeField] private SpriteRenderer skin;
     [SerializeField] private GameObject[] spawnPoint;
+    [SerializeField] private GameObject[] powerUps;
 
     private bool isAlive = true;
+    private float timer = 0f;
 
     public float Speed { get => speed; set => speed = value; }
 
@@ -24,16 +27,23 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         Movement();
+
+        timer += Time.deltaTime;
+
+        if (timer > 10f)
+        {
+            Destroy(gameObject);
+            timer = 0f;
+        }
     }
 
     protected IEnumerator ShootTimer() 
     {
         while (isAlive) 
         {
-            yield return new WaitForSeconds(shootRatio);
             Shoot();
+            yield return new WaitForSeconds(shootRatio);
         }
-
     }
 
     protected void Movement()
@@ -57,6 +67,12 @@ public class Enemy : MonoBehaviour
 
     protected IEnumerator DestroyEnemy()
     {
+        float loot = Random.Range(0, 1f);
+        if (loot > 0.8f) 
+        {
+            int randomPowerUp = Random.Range(0, 3);
+            Instantiate(powerUps[randomPowerUp], transform.position, Quaternion.identity);
+        }
         isAlive = false;
         PlayParticles();
         GetComponent<CircleCollider2D>().enabled = false;
@@ -65,13 +81,12 @@ public class Enemy : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("BulletPlayer")) 
         {
-           Destroy(collision.gameObject);
+
+           collision.GetComponent<Bullet_Player>().Pool.Release(collision.GetComponent<Bullet_Player>());
 
            if (lifes <= 1)
            {

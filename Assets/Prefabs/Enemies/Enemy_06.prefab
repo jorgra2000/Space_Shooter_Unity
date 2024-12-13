@@ -200,9 +200,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bec0e05cbd19f24481620ef640e5261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifes: 2
-  speed: 0.5
-  shootRatio: 0.2
+  lifes: 4
+  speed: 0.7
+  shootRatio: 0.4
   bulletEnemyPrefab: {fileID: 5303824174560747511, guid: 419066bca11bfe1438919e6c293e9efc, type: 3}
   particles: {fileID: 3193120033379065387}
   skin: {fileID: 2782628733264836994}
@@ -213,6 +213,10 @@ MonoBehaviour:
   - {fileID: 6927551820733779555}
   - {fileID: 5400636946425892099}
   - {fileID: 7319562530154583840}
+  powerUps:
+  - {fileID: 5727866063835813779, guid: f4d9c862cd105bb41a8dfceb9af51bbd, type: 3}
+  - {fileID: 3457530099530247035, guid: 09a27c201a90ee641a363747f17f4d75, type: 3}
+  - {fileID: 3016326638399382265, guid: a24f66af847910e45bd1ecbd792f31df, type: 3}
   rotationSpeed: 90
 --- !u!1 &3009213886028672112
 GameObject:

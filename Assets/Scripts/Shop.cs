@@ -27,10 +27,10 @@ public class Shop : MonoBehaviour
 
     public void BuyLife() 
     {
-        if (PlayerPrefs.GetInt("Gold") >= 50) 
+        if (PlayerPrefs.GetInt("Gold") >= 30) 
         {
             PlayerPrefs.SetInt("Lifes", PlayerPrefs.GetInt("Lifes") + 1);
-            PlayerPrefs.SetInt("Gold", PlayerPrefs.GetInt("Gold") - 50);
+            PlayerPrefs.SetInt("Gold", PlayerPrefs.GetInt("Gold") - 30);
             UpdateGUI();
         }
 
@@ -38,10 +38,10 @@ public class Shop : MonoBehaviour
 
     public void Buyx2() 
     {
-        if (PlayerPrefs.GetInt("Gold") >= 100) 
+        if (PlayerPrefs.GetInt("Gold") >= 60) 
         {
             PlayerPrefs.SetInt("x2", 1);
-            PlayerPrefs.SetInt("Gold", PlayerPrefs.GetInt("Gold") - 100);
+            PlayerPrefs.SetInt("Gold", PlayerPrefs.GetInt("Gold") - 60);
             UpdateGUI();
         }
 
@@ -49,10 +49,10 @@ public class Shop : MonoBehaviour
 
     public void Buyx3()
     {
-        if (PlayerPrefs.GetInt("Gold") >= 150) 
+        if (PlayerPrefs.GetInt("Gold") >= 100) 
         {
             PlayerPrefs.SetInt("x3", 1);
-            PlayerPrefs.SetInt("Gold", PlayerPrefs.GetInt("Gold") - 150);
+            PlayerPrefs.SetInt("Gold", PlayerPrefs.GetInt("Gold") - 100);
             UpdateGUI();
         }
     }

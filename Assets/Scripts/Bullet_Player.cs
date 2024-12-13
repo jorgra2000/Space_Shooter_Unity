@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -10,7 +8,6 @@ public class Bullet_Player : Bullet
 
     public ObjectPool<Bullet_Player> Pool { get => pool; set => pool = value; }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
